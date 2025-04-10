@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Avaliação Psicológica</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Arial', sans-serif;
+    }
+    .container-box {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .hidden {
+      display: none;
+    }
+    #nome {
+      text-transform: capitalize;
+    }
+    .pergunta {
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .opcoes-resposta {
+      margin-left: 20px;
+    }
+    .form-check-input {
+      margin-top: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Tela 1 -->
+  <div class="container-box" id="tela-nome">
+    <h3 class="text-center mb-4">Bem-vindo à nossa avaliação</h3>
+    <label for="nome" class="form-label">Digite nome e sobrenome:</label>
+    <input type="text" class="form-control" id="nome" placeholder="Digite seu nome" required>
+    <button class="btn btn-danger w-100 mt-3" onclick="irParaLoja()">Avançar</button>
+  </div>
+
+  <!-- Tela 2 -->
+  <div class="container-box hidden" id="tela-loja">
+    <h2 class="text-center mb-4">Qual loja você trabalha?</h2>
+    <label for="loja" class="form-label">Selecione a loja:</label>
+    <select id="loja" class="form-control" required>
+      <option value="">Selecione...</option>
+      <option value="Loja 01 - Av. Cel Estevam - Natal RN">Loja 01 - Av. Cel Estevam, Dixsept Rosado - Natal RN</option>
+      <option value="Loja 02 - Av. Cel Estevam - Natal RN">Loja 02 - Av. Cel Estevam, Nazaré - Natal RN</option>
+      <option value="Loja 03 - Av. Dão Silveira, Pitimbu - Natal RN">Loja 03 - Av. Dão Silveira, Pitimbu - Natal RN</option>
+      <option value="Loja 04 - Av. João Medeiros Filho - Natal RN">Loja 04 - Av. João Medeiros Filho - Natal RN</option>
+      <option value="Loja 05 - Cohabinal - Parnamirim RN">Loja 05 - Cohabinal, Parnamirim</option>
+      <option value="Loja 06 - Centro - Mossoró RN">Loja 06 - Centro, Mossoró RN</option>
+      <option value="Loja 07 - Estação - Goianinha RN">Loja 07 - Estação, Goianinha RN</option>
+      <option value="Loja 08 - Bancários - João Pessoa PB">Loja 08 - Bancários, João Pessoa PB</option>
+      <option value="Loja 09 - Centro - Santa Cruz RN">Loja 09 - Centro, Santa Cruz RN</option>
+      <option value="Loja 10 - Rua Dr. Ruy Pereira - São Gonçalo RN">Loja 10 - Rua Dr. Ruy Pereira, São Gonçalo RN</option>
+      <option value="Loja 11 - Av. Prudente de Morais - Natal RN">Loja 11 - Av. Prudente de Morais, Natal RN</option>
+      <option value="Loja 12 - Rua Francisco Marques - Bayeux PB">Loja 12 - Rua Francisco Marques, Bayeux PB</option>
+      <option value="Loja 13 - Av. Ayrton Senna - Natal RN">Loja 13 - Av. Ayrton Senna, Neópolis, Natal RN</option>
+      <option value="Auri Motopeças - Av. Miguel Castro - Natal RN">Auri Motopeças - Av. Miguel Castro, Natal RN</option>
+      <option value="Auparts RN - Dix Sept Rosado - Natal RN">Auparts RN - Dix Sept Rosado, Natal RN</option>
+      <option value="Auparts PB - José Américo - João Pessoa PB">Auparts PB - José Américo, João Pessoa PB</option>
+    </select>
+    <button class="btn btn-danger w-100 mt-3" onclick="irParaFormulario()">Avançar</button>
+  </div>
+
+  <!-- Tela 3 -->
+  <div class="container-box hidden" id="tela-formulario">
+    <h3 class="text-center mb-4">Avaliação de riscos Psicossociais</h3>
+    <form id="avaliacaoForm">
+      <div id="perguntas"></div>
+      <div class="mb-3 mt-4">
+        <label for="mensagem" class="form-label">Deseja deixar uma mensagem?</label>
+        <textarea class="form-control" id="mensagem" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-danger w-100">Enviar Avaliação</button>
+    </form>
+  </div>
+
+  <!-- Tela Final -->
+  <div class="container-box text-center hidden" id="tela-final">
+    <h2 id="mensagem-final" class="mb-3"></h2>
+    <p class="text-muted">Sua avaliação foi enviada com sucesso!</p>
+    <button class="btn btn-danger mt-3" onclick="reiniciar()">Nova Avaliação</button>
+  </div>
+
+  <script>
+    const perguntas = [
+      { id: 'respeito', texto: '1. Alguma vez você já se sentiu desrespeitado no seu ambiente de trabalho?' },
+      { id: 'apoio', texto: '2. Sua liderança tem apoiado suas sugestões ou ideias para melhoria do seu setor?' },
+      { id: 'comportamento', texto: '3. Existe algum comportamento inadequado ou inapropriado na sua equipe que lhe cause incômodo?' },
+      { id: 'assedio', texto: '4. Você já sofreu ou presenciou algum caso de assédio moral ou qualquer outro tipo de assédio na empresa?' },
+      { id: 'salario', texto: '5. Considerando suas responsabilidades, e atividades desenvolvidas na empresa, você está satisfeito com sua realidade salarial?' },
+      { id: 'exploracao', texto: '6. Você já se sentiu explorado no seu ambiente de trabalho, seja por carga excessiva, desvalorização ou qualquer outra situação?' },
+      { id: 'desistir', texto: '7. Em algum momento, você já pensou em desistir deste emprego, por questão de saúde emocional?' }
+    ];
+
+    const nomeInput = document.getElementById('nome');
+    const lojaInput = document.getElementById('loja');
+    const perguntasContainer = document.getElementById('perguntas');
+    const formulario = document.getElementById('avaliacaoForm');
+    let nomeFinal = "";
+
+    function irParaLoja() {
+      if (nomeInput.value.trim() === "") {
+        alert("Por favor, informe seu nome.");
+        return;
+      }
+      nomeFinal = capitalizeName(nomeInput.value.trim());
+      document.getElementById('tela-nome').classList.add('hidden');
+      document.getElementById('tela-loja').classList.remove('hidden');
+    }
+
+    function capitalizeName(name) {
+      return name.split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+    }
+
+    function irParaFormulario() {
+      if (lojaInput.value === "") {
+        alert("Por favor, selecione a loja.");
+        return;
+      }
+      document.getElementById('tela-loja').classList.add('hidden');
+      document.getElementById('tela-formulario').classList.remove('hidden');
+
+      perguntasContainer.innerHTML = perguntas.map(p => `
+        <div class="mb-4">
+          <p class="pergunta">${p.texto}</p>
+          <div class="opcoes-resposta">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="${p.id}" id="${p.id}-sim" value="Sim" required>
+              <label class="form-check-label" for="${p.id}-sim">Sim</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="${p.id}" id="${p.id}-nao" value="Não" required>
+              <label class="form-check-label" for="${p.id}-nao">Não</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="${p.id}" id="${p.id}-mais-ou-menos" value="Mais ou menos" required>
+              <label class="form-check-label" for="${p.id}-mais-ou-menos">Mais ou menos</label>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    formulario.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const dados = {
+        nome: nomeFinal,
+        loja: lojaInput.value,
+        mensagem: document.getElementById('mensagem').value
+      };
+      perguntas.forEach(p => {
+        dados[p.id] = document.querySelector(`input[name="${p.id}"]:checked`).value;
+      });
+
+      fetch("https://script.google.com/macros/s/AKfycbywBVFtIXEXb9aQsiCvEp_GWAzFo8jZ0qs_zD9fDqK2hGfgQ8XgQFrM7PM505CGcLa35Q/exec", {
+        method: "POST",
+        body: new URLSearchParams(dados)
+      })
+      .then(() => {
+        document.getElementById('tela-formulario').classList.add('hidden');
+        showThankYou(nomeFinal);
+      })
+      .catch(err => alert("Erro ao enviar: " + err));
+    });
+
+    function showThankYou(nome) {
+      document.getElementById('mensagem-final').innerText = `Obrigado, ${nome}.`;
+      document.getElementById('tela-final').classList.remove('hidden');
+    }
+
+    function reiniciar() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
